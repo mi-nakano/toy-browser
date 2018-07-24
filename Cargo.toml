@@ -1,0 +1,6 @@
+[package]
+name = "toy-browser"
+version = "0.1.0"
+authors = ["mi-nakano <mizuki590@gmail.com>"]
+
+[dependencies]
