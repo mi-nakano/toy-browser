@@ -8,6 +8,7 @@ pub struct Node {
 pub enum NodeType {
     Text(String),
     Element(ElementData),
+    Comment(String),
 }
 
 pub struct ElementData {
@@ -29,4 +30,8 @@ pub fn elem(name: String, attrs: AttrMap, children: Vec<Node>) -> Node {
             attributes: attrs,
         })
     }
+}
+
+pub fn comment(data: String) -> Node {
+    Node { children: Vec::new(), node_type: NodeType::Comment(data) }
 }
