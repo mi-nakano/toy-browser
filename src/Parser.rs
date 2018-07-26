@@ -9,7 +9,7 @@ impl Parser {
     }
 
     fn starts_with(&self, s: &str) -> bool {
-        self.input[self.pos ..].starts_with(s)
+        self.input[self.pos..].starts_with(s)
     }
 
     fn eof(&self) -> bool {
