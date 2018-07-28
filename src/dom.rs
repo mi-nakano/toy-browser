@@ -16,6 +16,19 @@ pub struct ElementData {
     attributes: AttrMap,
 }
 
+impl ElementData {
+    pub fn id(&self) -> Option<&String> {
+        self.attributes.get("id")
+    }
+
+    pub fn classes(&self) -> HashSet<&str> {
+        match self.attributes.get("class") {
+            Some(classlist) => classlist.split(' ').collect(),
+            None => HashSet::new()
+        }
+    }
+}
+
 pub type AttrMap = HashMap<String, String>;
 
 pub fn text(data: String) -> Node {
