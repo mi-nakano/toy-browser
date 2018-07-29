@@ -74,3 +74,28 @@ pub fn style_tree<'a>(root: &'a Node, stylesheet: &'a Stylesheet) -> StyledNode<
         children: root.children.iter().map(|child| style_tree(child, stylesheet)).collect(),
     }
 }
+
+enum Display {
+    Inline,
+    Block,
+    None,
+}
+
+impl StyledNode {
+    // Return the specified value of a property if it exists, otherwise `None`.
+    fn value(&self, name: &str) -> Option<Value> {
+        self.specified_values.get(name).map(|v| v.clone())
+    }
+
+    // The value of the `display` property (defaults to inline).
+    fn display(&self) -> Display {
+        match self.value("display") {
+            Some(Keyword(s)) => match &*s {
+                "block" => Display::Block,
+                "none" => Display::None,
+                _ => Display::Inline
+            },
+            _ => Display::Inline
+        }
+    }
+}
