@@ -204,6 +204,14 @@ impl LayoutBox {
         }
     }
 
+    fn calculate_block_height(&mut self) {
+        // If the height is set to an explicit length, use that exact length.
+        // Otherwise, just keep the value set by `layout_block_children`.
+        if let Some(Length(h, Px)) = self.get_style_node().value("height") {
+            self.dimensions.content.height = h;
+        }
+    }
+
     fn get_inline_container(&mut self) -> &mut LayoutBox {
         match self.box_type {
             InlineNode(_) | AnonymousBlock => self,
@@ -216,6 +224,32 @@ impl LayoutBox {
                 }
                 self.children.last_mut().unwrap()
             }
+        }
+    }
+}
+
+impl Dimensions {
+    // The area covered by the content area plus its padding.
+    fn padding_box(self) -> Rect {
+        self.content.expanded_by(self.padding)
+    }
+    // The area covered by the content area plus padding and borders.
+    fn border_box(self) -> Rect {
+        self.padding_box().expanded_by(self.border)
+    }
+    // The area covered by the content area plus padding, borders, and margin.
+    fn margin_box(self) -> Rect {
+        self.border_box().expanded_by(self.margin)
+    }
+}
+
+impl Rect {
+    fn expanded_by(self, edge: EdgeSizes) -> Rect {
+        Rect {
+            x: self.x - edge.left,
+            y: self.y - edge.top,
+            width: self.width + edge.left + edge.right,
+            height: self.height + edge.top + edge.bottom,
         }
     }
 }
